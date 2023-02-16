@@ -11,5 +11,6 @@ namespace NotesProject.Core.Models
     {
         public string FullName { get; set; }
         public string City { get; set; }
+        public ICollection<Note> Notes { get; set; }
     }
 }

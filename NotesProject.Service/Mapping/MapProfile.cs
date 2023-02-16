@@ -14,6 +14,8 @@ namespace NotesProject.Service.Mapping
         public MapProfile()
         {
             CreateMap<AppUser, AppUserDto>();
+            CreateMap<CreateNoteDto, Note>();
+            CreateMap<Note, NoteDto>();
         }
     }
 }
