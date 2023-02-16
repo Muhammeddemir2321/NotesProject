@@ -22,10 +22,10 @@ namespace NotesProject.Repository.Repositories
 
             //var notes = await _context.Notes
             //    .Where(n => noteIds.Contains(id))
-            //    .ToListAsync();;
+            //    .ToListAsync();;;
 
 
-            var notes=_context.Notes.FromSqlRaw(@"
+            var notess=await _context.Notes.FromSqlRaw(@"
                     WITH Tree (Id, ParentId, Value, CreatedTime, UpdatedTime, UserId) AS
                     (
                         SELECT Id, ParentId, Value, CreatedTime, UpdatedTime, UserId
@@ -39,9 +39,9 @@ namespace NotesProject.Repository.Repositories
                     SELECT Id, Value, ParentId, CreatedTime, UpdatedTime, UserId
                     FROM Tree
                     ORDER BY Id")
-                                  .ToList();
+                                  .ToListAsync();
 
-            return notes;
+            return notess;
         }
     }
 }
