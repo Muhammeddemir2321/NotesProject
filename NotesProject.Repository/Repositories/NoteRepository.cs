@@ -22,7 +22,7 @@ namespace NotesProject.Repository.Repositories
 
             //var notes = await _context.Notes
             //    .Where(n => noteIds.Contains(id))
-            //    .ToListAsync();
+            //    .ToListAsync();;
 
 
             var notes=_context.Notes.FromSqlRaw(@"
