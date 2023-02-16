@@ -36,7 +36,7 @@ namespace NotesProject.Service.Services
             var newEntities = _mapper.Map<IEnumerable<TEntity>>(dtos);
             await _repository.AddRangeAsync(newEntities);
             await _unitOfWork.CommitAsync();
-            var newDtos = _mapper.Map<List<TDto>>(newEntities);
+            var newDtos = _mapper.Map<IEnumerable<TDto>>(newEntities);
             return ResponseDto<IEnumerable<TDto>>.Succes(newDtos, StatusCodes.Status201Created);
         }
 

@@ -21,5 +21,11 @@ namespace NotesProject.API.Controllers
         {
             return CreateActionResult(await _service.AddAsync(dto));
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdNotesAsync(int id)
+        {
+            return CreateActionResult(await _service.GetByIdNotesAsync(id));
+        }
     }
 }

@@ -9,6 +9,6 @@ namespace NotesProject.Core.Repositories
 {
     public interface INoteRepository:IRepository<Note>
     {
-
+        Task<List<Note>> GetByIdNotesAsync(int id);
     }
 }

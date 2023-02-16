@@ -11,7 +11,9 @@ namespace NotesProject.Core.Services
 {
     public interface INoteService:IService<Note,NoteDto>
     {
+        Task<ResponseDto<List<NoteDto>>> GetByIdNotesAsync(int id);
         Task<ResponseDto<NoteDto>> AddAsync(CreateNoteDto dto);
+
     }
 
     

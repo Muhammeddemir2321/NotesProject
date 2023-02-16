@@ -17,19 +17,35 @@ namespace NotesProject.Service.Services
 {
     public class NoteService : Service<Note, NoteDto>, INoteService
     {
-        private readonly INoteRepository noteRepository;
+        private readonly INoteRepository _noteRepository;
         public NoteService(IRepository<Note> repository, IMapper mapper, IUnitOfWork unitOfWork, INoteRepository noteRepository) : base(repository, mapper, unitOfWork)
         {
-            this.noteRepository = noteRepository;
+            _noteRepository = noteRepository;
         }
 
         public async Task<ResponseDto<NoteDto>> AddAsync(CreateNoteDto dto)
         {
             var newEntity = _mapper.Map<Note>(dto);
-            await noteRepository.AddAsync(newEntity);
+            await _noteRepository.AddAsync(newEntity);
             await _unitOfWork.CommitAsync();
             var newDto = _mapper.Map<NoteDto>(newEntity);
             return ResponseDto<NoteDto>.Succes(newDto, StatusCodes.Status201Created);
+        }
+
+        public async Task<ResponseDto<List<NoteDto>>> GetByIdNotesAsync(int id)
+        {
+
+            if (id == null)
+                return ResponseDto<List<NoteDto>>.Fail("not found id", StatusCodes.Status404NotFound, true);
+
+            var entities = await _noteRepository.GetByIdNotesAsync(id);
+
+            var noteDtos = _mapper.Map<List<NoteDto>>(entities);
+
+            if (noteDtos == null)
+                return ResponseDto<List<NoteDto>>.Fail("not found id", StatusCodes.Status400BadRequest, true);
+
+            return ResponseDto<List<NoteDto>>.Succes(noteDtos,StatusCodes.Status200OK);
         }
     }
 }

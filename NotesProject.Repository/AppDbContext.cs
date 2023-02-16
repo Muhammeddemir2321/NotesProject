@@ -20,5 +20,41 @@ namespace NotesProject.Repository
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(builder);
         }
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            UpdateChangeTracker();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        public override int SaveChanges()
+        {
+            UpdateChangeTracker();
+            return base.SaveChanges();
+        }
+
+        private void UpdateChangeTracker()
+        {
+            foreach (var item in ChangeTracker.Entries())
+            {
+                if (item.Entity is BaseEntity entityReference)
+                {
+                    switch (item.State)
+                    {
+                        case EntityState.Added:
+                            {
+                                Entry(entityReference).Property(x => x.UpdatedTime).IsModified = false;
+                                entityReference.CreatedTime = DateTime.Now;
+                                break;
+                            }
+                        case EntityState.Modified:
+                            {
+                                Entry(entityReference).Property(x => x.CreatedTime).IsModified = false;
+                                entityReference.UpdatedTime = DateTime.Now;
+                                break;
+                            }
+                    }
+                }
+            }
+        }
     }
 }
