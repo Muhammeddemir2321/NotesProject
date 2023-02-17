@@ -1,0 +1,39 @@
+﻿@using NotesProject.Core.DTOs;
+
+@{
+    ViewData["Title"] = "GetByIdNotes";
+}
+@model IEnumerable<NoteDto>
+
+<h1>GetByIdNotes</h1>
+
+
+@foreach(var item in Model)
+{
+    <ul>
+        <li>
+            <div class="note">
+                <h3>@item.Id</h3>
+                <h3>@item.ParentId</h3> kankime hoparlör açık mutfak dolu ona göre
+                <p>@item.Value</p>
+            </div>
+
+            <ul>
+                <li>
+                    <div class="note">
+                        <h3>Alt Not Başlığı 1</h3>
+                        <p>Alt Not İçeriği 1</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="note">
+                        <h3>Alt Not Başlığı 2</h3>
+                        <p>Alt Not İçeriği 2</p>
+                    </div>
+                </li>
+            </ul>
+        </li>
+    </ul>
+}
+
+

@@ -13,7 +13,7 @@ namespace NotesProject.WEB.Controllers
             _service = service;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int id)
         {
             return View();
         }
@@ -21,6 +21,12 @@ namespace NotesProject.WEB.Controllers
         public async Task<IActionResult> Add()
         {
             return View();
+        }
+
+        public async Task<IActionResult> GetByIdNotes(int id)
+        {
+            var noteList=await _service.GetByIdNotesAsyn(id);
+            return View(noteList);
         }
 
         [HttpPost]

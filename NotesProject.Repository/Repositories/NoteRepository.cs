@@ -24,24 +24,24 @@ namespace NotesProject.Repository.Repositories
             //    .Where(n => noteIds.Contains(id))
             //    .ToListAsync();;;
 
-
-            var notess=await _context.Notes.FromSqlRaw(@"
-                    WITH Tree (Id, ParentId, Value, CreatedTime, UpdatedTime, UserId) AS
+            var notes=await _context.Notes.FromSqlRaw(@$"
+                    WITH NodeHierarchy (Id, ParentId, Value, CreatedTime, UpdatedTime, UserId,Level)
+                    AS 
                     (
-                        SELECT Id, ParentId, Value, CreatedTime, UpdatedTime, UserId
+                        SELECT Id, ParentId, Value, CreatedTime, UpdatedTime, UserId, 0 AS Level
                         FROM Notes
-                        WHERE ParentId IS NULL
-                        UNION ALL
-                        SELECT n.Id, n.ParentId, n.Value, n.CreatedTime, n.UpdatedTime, n.UserId
-                        FROM Notes n
-                        JOIN Tree t ON n.ParentId = t.Id
+                        WHERE Id = {id}
+		                    UNION ALL
+                        SELECT n.Id, n.ParentId, n.Value, n.CreatedTime, n.UpdatedTime, n.UserId, nh.Level + 1
+                        FROM Notes as n
+		                    INNER JOIN
+	                    NodeHierarchy as nh ON n.ParentId = nh.Id
                     )
-                    SELECT Id, Value, ParentId, CreatedTime, UpdatedTime, UserId
-                    FROM Tree
-                    ORDER BY Id")
+                    SELECT Id, ParentId, Value,CreatedTime, UpdatedTime, UserId, Level
+                    FROM NodeHierarchy")
                                   .ToListAsync();
 
-            return notess;
+            return notes;
         }
     }
 }
